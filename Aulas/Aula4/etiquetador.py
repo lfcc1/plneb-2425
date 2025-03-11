@@ -15,7 +15,7 @@ def gera_termo_bold(matched):
     text = matched.group(0)
     #print(text)
     if text in conceitos and text not in black_list:
-        return f'<a href="" title="{conceitos[text]}">{text}</a>'
+        return f'<a href="../Aula3/dicionario_medico.html#@{text}" target= "_blank" title="{conceitos[text]}">{text}</a>'
     else:
         return text
 

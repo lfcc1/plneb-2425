@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+
+
+{% block head %}
+<title>{{title}}</title>
+{% endblock%}
+
+
+{% block body %}
+
+<ul>
+
+    {% for designacao in designacoes %}
+
+        <li>
+            {{designacao}}
+        </li>
+
+    {% endfor %}
+
+</ul>
+
+{% endblock %}
+
