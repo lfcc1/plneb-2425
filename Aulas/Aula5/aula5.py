@@ -10,12 +10,19 @@ db_file.close()
 
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return render_template("home.html")
 
 @app.route("/conceitos")
 def conceitos():
     designacoes = list(db.keys())
     return render_template("conceitos.html", designacoes=designacoes, title="Lista de Conceitos")
+
+@app.get("/conceitos/<designacao>")
+def conceito(designacao):
+    if designacao in db:
+        return render_template("conceito.html", designacao=designacao, descricao = db[designacao])
+    else:
+        return render_template("conceito.html", designacao="Erro", descricao = "Descrição não encontrada")
 
 @app.route("/api/conceitos")
 def api_conceitos():
@@ -26,8 +33,23 @@ def api_conceito(designacao):
 
     return {"designacao":designacao, "descricao":db[designacao]}
 
-@app.post("/api/conceitos")
+
+@app.post("/conceitos")
 def adicionar_conceito():
+    descricao = request.form.get("descricao")
+    designacao = request.form.get("designacao")
+
+    db[designacao] = descricao
+    f_out = open("conceitos_.json", "w")
+    json.dump(db,f_out, indent=4, ensure_ascii=False)
+    f_out.close()
+    #form data
+
+    designacoes= list(db.keys())
+    return render_template("conceitos.html",designacoes=designacoes, title="Lista de Conceitos")
+
+@app.post("/api/conceitos")
+def adicionar_conceito_api():
     #json
     data = request.get_json()
     #{"designacao":"vida", "descricao": "a vida é ..."}
